@@ -8,7 +8,7 @@ import my_priority_queue
 # flower 심을 edge_width를 정한다.
 EDGE_WIDTH = 1
 
-def plant_sunflower(start_pos, pq):
+def plant_sunflower_to_top(start_pos, pq):
 	y, x = start_pos
 	move_to_pos(y, x)
 	
@@ -24,17 +24,20 @@ def plant_sunflower(start_pos, pq):
 			plant(Entities.Sunflower)
 			pq.push((measure(), y, x))
 
-	# 오른쪽 엣지 채우기
-	# start_y = y - EDGE_WIDTH
-	# start_x = row - EDGE_WIDTH
-	# for y in range(start_y, -1, -1):
-	# 	for x in range(start_x, row):
-	# 		move_to_pos(y, x)
-	# 		if get_ground_type() != Grounds.Soil:
-    #             till()
+def plant_sunflower_to_right(start_pos, pq):
+	y, x = start_pos
+	move_to_pos(y, x)
+
+	row = get_world_size()
+
+	for x in range(x, x - EDGE_WIDTH, -1):
+		for y in range(0, row - 1):
+			move_to_pos(y, x)
+			if get_ground_type() != Grounds.Soil:
+                till()
 		
-	# 		plant(Entities.Sunflower)
-	# 		pq.push((measure(), y, x))
+			plant(Entities.Sunflower)
+			pq.push((measure(), y, x))
 	
 def harvest_sunflower(pq):
 	while True:
@@ -59,12 +62,22 @@ def loop_sunflower():
 	start_pos = (row - 1, 0)
 	pq = my_priority_queue
 	while True:
-		plant_sunflower(start_pos, pq)
+		plant_sunflower_to_top(start_pos, pq)
+		harvest_sunflower(pq)
+		pq.reset()
+
+def loop_sunflower_to_right():
+	l = get_world_size()
+	start_pos = (l - 1, l - 1)
+	pq = my_priority_queue
+	while True:
+		plant_sunflower_to_right(start_pos, pq)
 		harvest_sunflower(pq)
 		pq.reset()
 
 clear()
 spawn_drone(loop_sunflower)
+spawn_drone(loop_sunflower_to_right)
 
 while True:
 	move_to_pos(0, 0)
