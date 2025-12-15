@@ -44,4 +44,3 @@ def loop_maze(size):
 	while True:
 		make_full_maze(size)
 		escape()
-

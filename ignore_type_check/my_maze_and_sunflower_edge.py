@@ -95,10 +95,9 @@ for i in range(1, get_world_size() - 1):
 pos_list = []
 width_size = make_floor(rest_world_size / maze_count)
 
-half = make_floor(width_size / 2)
 for y in range(maze_count):
 	for x in range(maze_count):
-		pos_list.append((y * width_size + half , x * width_size + half))
+		pos_list.append((y * width_size, x * width_size))
 
 def maze_drone(pos):
 	y, x = pos
